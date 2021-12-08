@@ -64,6 +64,12 @@ class CharactersFragment : Fragment(), ICharactersView {
         // here you add logic for showing the error to the user
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // this method will clear the disposable from the presenter
+        presenter.destroyPresenter()
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
