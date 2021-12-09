@@ -11,16 +11,25 @@ import javax.inject.Singleton
 @Module
 class AppModule(private val application: Application) {
 
+    /**
+     * Right here I am providing the application context to Dagger
+     */
     @Provides
     @Singleton
     fun provideContext(): Context = application.applicationContext
 
+    /**
+     * Right here I am providing the shared preferences file
+     */
     @Provides
     @Singleton
     fun provideSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences("MY_SHARED_PREFS", Context.MODE_PRIVATE)
     }
 
+    /**
+     * Right here I am providing the connectivity manager
+     */
     @Provides
     @Singleton
     fun provideConnectivityManager(context: Context): ConnectivityManager {
