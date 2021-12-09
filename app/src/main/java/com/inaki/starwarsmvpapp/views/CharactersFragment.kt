@@ -1,41 +1,41 @@
 
 package com.inaki.starwarsmvpapp.views
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.inaki.starwarsmvpapp.R
+import com.inaki.starwarsmvpapp.StarWarsApplication
 import com.inaki.starwarsmvpapp.model.characters.Character
 import com.inaki.starwarsmvpapp.presenters.CharactersPresenter
 import com.inaki.starwarsmvpapp.presenters.ICharactersView
+import javax.inject.Inject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * This fragment is implementing the [ICharactersView] that is our view contract
- * In order to update the UI
- */
 class CharactersFragment : Fragment(), ICharactersView {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     // This variable is creating our presenter that we need to use
-    private val presenter: CharactersPresenter by lazy {
-        CharactersPresenter(this)
+//    private val presenter: CharactersPresenter by lazy {
+//        CharactersPresenter(this)
+//    }
+
+    // Here we are injecting our presenter
+    @Inject lateinit var presenter: CharactersPresenter
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        StarWarsApplication.starWarsComponent.inject(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        presenter.initPresenter(this)
+        presenter.checkNetworkConnection()
     }
 
     override fun onCreateView(
@@ -58,10 +58,14 @@ class CharactersFragment : Fragment(), ICharactersView {
 
     override fun characterUpdated(characters: List<Character>) {
         // Here you add the logic to update the recycler view
+        Toast.makeText(requireContext(), characters[0].name, Toast.LENGTH_LONG).show()
+        Log.d("CharactersFragment", characters.toString())
     }
 
     override fun onErrorData(error: Throwable) {
         // here you add logic for showing the error to the user
+        Toast.makeText(requireContext(), error.localizedMessage, Toast.LENGTH_LONG).show()
+        Log.e("CharactersFragment", error.stackTraceToString())
     }
 
     override fun onDestroyView() {
@@ -71,22 +75,7 @@ class CharactersFragment : Fragment(), ICharactersView {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CharactersFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance() =
-            CharactersFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance() = CharactersFragment()
     }
 }
