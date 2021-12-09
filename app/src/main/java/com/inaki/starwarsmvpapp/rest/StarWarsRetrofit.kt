@@ -23,6 +23,9 @@ object StarWarsRetrofit {
 
     // here I am creating the retrofit builder and my network API
     fun getNetworkApi(): StarWarsApi {
+        // This is a builder pattern
+        // so the object is been created step by step
+        // provides setter methods to add any specific data
         return Retrofit.Builder()
             .baseUrl(StarWarsApi.BASE_URL)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
