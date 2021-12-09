@@ -10,12 +10,17 @@ class StarWarsApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        starWarsComponent = DaggerStarWarsComponent.builder()
+        // here I am starting the dagger component upon app initialization
+        startWarsComponent = DaggerStarWarsComponent
+            .builder()
+                // I create the app module to be used
             .appModule(AppModule(this))
+                // i build the dagger component
             .build()
     }
 
     companion object {
-        lateinit var starWarsComponent: StarWarsComponent
+        // this property I can access to it at any time
+        lateinit var startWarsComponent: StarWarsComponent
     }
 }

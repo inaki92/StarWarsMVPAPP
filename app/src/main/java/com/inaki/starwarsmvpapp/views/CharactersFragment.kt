@@ -11,6 +11,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.inaki.starwarsmvpapp.R
 import com.inaki.starwarsmvpapp.StarWarsApplication
+import com.inaki.starwarsmvpapp.di.AppModule
+import com.inaki.starwarsmvpapp.di.DaggerStarWarsComponent
+import com.inaki.starwarsmvpapp.di.StarWarsComponent
 import com.inaki.starwarsmvpapp.model.characters.Character
 import com.inaki.starwarsmvpapp.presenters.CharactersPresenter
 import com.inaki.starwarsmvpapp.presenters.ICharactersView
@@ -28,14 +31,15 @@ class CharactersFragment : Fragment(), ICharactersView {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        // here I am telling dagger to inject all the members annotated with @Inject in this fragment
+        StarWarsApplication.startWarsComponent.inject(this)
 
-        StarWarsApplication.starWarsComponent.inject(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         presenter.initPresenter(this)
-        presenter.checkNetworkConnection()
+        presenter.checkNetworkState()
     }
 
     override fun onCreateView(
